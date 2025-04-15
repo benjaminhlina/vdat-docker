@@ -1,4 +1,4 @@
-# vdat-lite
+# vdat-r-minimal
 
 # WORK IN PROGRESS!!
 
