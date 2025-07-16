@@ -1,5 +1,6 @@
 #! /bin/bash
 
+# should be run as ./fathom_install.sh FATHOMINSTALLER.msi
 ## should check that the fathom msi was passed as argument ($1 ??)
 
 . /etc/os-release
