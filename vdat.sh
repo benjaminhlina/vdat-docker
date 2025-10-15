@@ -35,37 +35,42 @@ if [[ -e $1 && $1 =~ .*\.msi$ ]]; then
 
   echo "vdat.exe extracted to $PWD"
 
-# If the first argument is an existing vdat.exe file, run it with wine 
-elif [[ -e $1 && $1 =~ .*vdat\.exe$ ]]; then
+# If the first argument is not an MSI, run vdat.exe with Wine 
+else
+  if [[ ! -e "vdat.exe" ]]; then
+    echo -e "vdat.exe not found in current directory."
+    exit 1
+  fi
+
   # Expand the full path of the vdat.exe file
-  VDAT_FULL_PATH=$(readlink -f $1)
+  VDAT_FULL_PATH=$(readlink -f "vdat.exe")
   # This is the base command to run vdat.exe with wine in the container
-  #   ${*:2} is grabbing all of arguments after the first one (vdat.exe)
-  #   So, it assumes: ./vdat_helper.sh vdat.exe <other vdat args>
-  VDAT_CMD="wine vdat.exe ${*:2};"
+  #   ${*:1} is grabbing all of the arguments
+  #   So, it assumes: ./vdat.sh <vdat args>
+  VDAT_CMD="wine vdat.exe ${*:1};"
 
   # This is overly strict and needs to be updated to allow for more options
   #   Right now it doesnt allow for multiple convert options
-  # If vdat convert is being run and the 4th argument is a .vdat or .vrl file, then
+  # If vdat convert is being run and the 3rd argument is a .vdat or .vrl file, then
   #   build the docker command to mount the input file and output directory
   #   So, it assumes something like:
-  #     ./vdat_helper.sh vdat.exe convert --format=<format> <input.vdat>
+  #     ./vdat.sh convert --format=<format> <input.vdat>
   
-  if [[ $2 == "convert" && $4 =~ .*\.v(dat|rl)$ ]]; then
+  if [[ $1 == "convert" && $3 =~ .*\.v(dat|rl)$ ]]; then
     # If converting, we need to mount the input file to send it to the container
     #   AND mount an output directory to get the output files from the container
-    THINGS_TO_MOUNT="-v ${PWD}/vdat_out:/VDAT/vdat_out -v $(readlink -f $4):/VDAT/$(basename $4)"
+    THINGS_TO_MOUNT="-v ${PWD}/vdat_out:/VDAT/vdat_out -v $(readlink -f $3):/VDAT/$(basename $3)"
 
-    if [[ $3 == "--format=csv.fathom" ]]; then
+    if [[ $2 == "--format=csv.fathom" ]]; then
       # Move the output CSV file to the mounted output directory and set permissions
-      VDAT_CMD+="mv ${4%.*}.csv /VDAT/vdat_out; chmod -R 666 /VDAT/vdat_out"
+      VDAT_CMD+="mv ${3%.*}.csv /VDAT/vdat_out; chmod -R 666 /VDAT/vdat_out"
     else
       # Move the output folder to the mounted output directory and set permissions
-      VDAT_CMD+="mv ${4%.*}.csv-fathom-split /VDAT/vdat_out; chmod -R 666 /VDAT/vdat_out"
+      VDAT_CMD+="mv ${3%.*}.csv-fathom-split /VDAT/vdat_out; chmod -R 666 /VDAT/vdat_out"
     fi
-  elif [[ $2 == "inspect" ]]; then
+  elif [[ $1 == "inspect" ]]; then
     # If inspecting, we need to mount the input file to send it to the container
-    THINGS_TO_MOUNT="-v $(readlink -f $3):/VDAT/$(basename $3)"
+    THINGS_TO_MOUNT="-v $(readlink -f $2):/VDAT/$(basename $2)"
   fi
   
   # Run the vdat.exe command in the container with wine
@@ -79,7 +84,4 @@ elif [[ -e $1 && $1 =~ .*vdat\.exe$ ]]; then
     $THINGS_TO_MOUNT \
     ghcr.io/trackyverse/vdat sh -c "$VDAT_CMD"
 
-else
-  echo -e "Command or file not found."
-  exit 1
 fi
