@@ -21,7 +21,7 @@ if [[ -e $1 && $1 =~ .*\.msi$ ]]; then
 
   docker run --rm \
     -v $VDAT_TEMP_DIR:/VDAT \
-    vdat sh -c \
+    ghcr.io/trackyverse/vdat sh -c \
       "msiextract fathom_connect.msi > /dev/null; \
       mv Innovasea/Fathom\ Connect/vdat.exe /VDAT/vdat.exe;
       rm -rf Innovasea"
@@ -39,7 +39,7 @@ elif [[ -e $1 && $1 =~ .*vdat\.exe$ ]]; then
   VDAT_FULL_PATH=$(readlink -f $1)
   docker run --rm \
     -v ${VDAT_FULL_PATH}:/VDAT/vdat.exe \
-    vdat sh -c "wine vdat.exe ${@:2}"
+    ghcr.io/trackyverse/vdat sh -c "wine vdat.exe ${@:2}"
 
 else
   echo -e "Command or file not found."
