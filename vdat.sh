@@ -37,6 +37,8 @@ if [[ -e $1 && $1 =~ .*\.msi$ ]]; then
 
 # If the first argument is not an MSI, run vdat.exe with Wine 
 else
+
+  # Check that vdat.exe exists in the current directory
   if [[ ! -e "vdat.exe" ]]; then
     echo -e "vdat.exe not found in current directory."
     exit 1
