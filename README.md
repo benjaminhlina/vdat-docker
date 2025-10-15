@@ -1,13 +1,17 @@
 # Innovasea's VDAT and trackyverse R packages on Linux
 
-The Dockerfiles contained within this repository aim to provide access to Innovasea's VDAT executable, as well as the [`glatos`](https://github.com/ocean-tracking-network/glatos) and [`rvdat`](https://github.com/mhpob/rvdat) packages from the OTN-based trackyverse. You'll need to download Fathom Connect from [Innovasea's Download page](https://support.fishtracking.innovasea.com/s/downloads) and extract the vdat executable.
+The helper file contained within this repository (`vdat_helper.sh`) aims to provide access to Innovasea's VDAT executable via a Docker container. This allows users to run VDAT on macOS and Linux systems, where it is not natively supported.
 
-- [vdat](https://github.com/trackyverse/vdat-docker/tree/main/vdat) just runs vdat.exe in Wine.
-- [vdat-r2u](https://github.com/trackyverse/vdat-docker/tree/main/vdat-r2u) also contains a full version of R, as well as the `glatos` and `rvdat` packages.
-- [vdat-r-minimal](https://github.com/trackyverse/vdat-docker/tree/main/vdat-r-minimal) contains a minimal version of R, along with `glatos` and `rvdat`.
+## Installation Instructions
+1. Download Fathom Connect from [Innovasea's Download page](https://support.fishtracking.innovasea.com/s/downloads).
+2. Download the `vdat_helper.sh` script from this repository into the same directory.
+3. Install Docker
+  - [macOS](https://docs.docker.com/desktop/install/mac-install/)
+  - [Linux](https://docs.docker.com/engine/install/)
+4. Open a terminal and navigate to the directory where you downloaded the Fathom Connect installer and `vdat_helper.sh` script.
+5. Make the helper script executable: `chmod +x vdat_helper.sh`
+6. Run the helper script with the Fathom Connect installer as an argument: `./vdat_helper.sh Fathom_Installer.msi`. This will extract `vdat.exe` from the installer and place it in the same directory.
 
-## Linux
-1. [Install Docker](https://docs.docker.com/engine/install/)
-2. "Install" Fathom Connect to unpack `vdat.exe` using either a separate Windows machine or wine (`wine msiexec -qb Fathom_Installer.msi`).
-3. Copy one of the Dockerfiles and place it into the same directory as `vdat.exe`
-4. `cd` into the directory and run `docker build -t vdat .`
+## Using VDAT!
+
+You can now run VDAT using the helper script. For example, to see the available commands, run: `./vdat_helper.sh vdat.exe --help`.

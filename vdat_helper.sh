@@ -13,7 +13,8 @@ if [[ -e $1 && $1 =~ .*\.msi$ ]]; then
   # Pull out vdat.exe from the Fathom Connect installer
   ## --rm -> remove container after run
   ## -v -> mount temporary directory to /VDAT in container
-  ## vdat sh -c -> run the following commands in a shell within the container
+  ## ghcr.io/trackyverse/vdat sh -c -> run the following commands in a shell
+  ##    within the container
   ## msiextract fathom_connect.msi > /dev/null -> extract the .msi file and 
   ##    suppress output
   ## mv Innovasea/Fathom\ Connect/vdat.exe /VDAT/vdat.exe -> move the extracted
