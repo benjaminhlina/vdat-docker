@@ -42,7 +42,7 @@ elif [[ -e $1 && $1 =~ .*vdat\.exe$ ]]; then
   # This is the base command to run vdat.exe with wine in the container
   #   ${*:2} is grabbing all of arguments after the first one (vdat.exe)
   #   So, it assumes: ./vdat_helper.sh vdat.exe <other vdat args>
-  VDAT_CMD="wine vdat.exe ${*:2}"
+  VDAT_CMD="wine vdat.exe ${*:2};"
 
   # This is overly strict and needs to be updated to allow for more options
   #   Right now it doesnt allow for multiple convert options
