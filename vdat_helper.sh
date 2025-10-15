@@ -38,9 +38,27 @@ if [[ -e $1 && $1 =~ .*\.msi$ ]]; then
 elif [[ -e $1 && $1 =~ .*vdat\.exe$ ]]; then
   # If the first argument is an existing vdat.exe file, run it with wine
   VDAT_FULL_PATH=$(readlink -f $1)
+  VDAT_CMD="wine vdat.exe ${*:2}"
+
+  # This is overly strict and needs to be updated to allow for more options
+  # Right now it doesnt allow for multiple convert options
+  if [[ $2 == "convert" && $4 =~ .*\.v(dat|rl)$ ]]; then
+    THINGS_TO_MOUNT="-v ${PWD}/vdat_out:/VDAT/vdat_out -v $(readlink -f $4):/VDAT/$(basename $4)"
+
+    if [[ $3 == "--format=csv.fathom" ]]; then
+      VDAT_CMD+="mv ${4%.*}.csv /VDAT/vdat_out; chmod -R 666 /VDAT/vdat_out"
+    else
+      VDAT_CMD+="mv ${4%.*}.csv-fathom-split /VDAT/vdat_out; chmod -R 666 /VDAT/vdat_out"
+    fi
+  elif [[ $2 == "inspect" ]]; then
+    THINGS_TO_MOUNT="-v $(readlink -f $3):/VDAT/$(basename $3)"
+  fi
+  
+
   docker run --rm \
     -v ${VDAT_FULL_PATH}:/VDAT/vdat.exe \
-    ghcr.io/trackyverse/vdat sh -c "wine vdat.exe ${@:2}"
+    $THINGS_TO_MOUNT \
+    ghcr.io/trackyverse/vdat sh -c "$VDAT_CMD"
 
 else
   echo -e "Command or file not found."
