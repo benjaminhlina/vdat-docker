@@ -75,13 +75,25 @@ else
     THINGS_TO_MOUNT="-v $(readlink -f $2):/VDAT/$(basename $2)"
   fi
   
+  # we need to ID host arch to get the correct build 
+  HOST_ARCH=$(uname -m)
+  # Default docker platform option empty
+  DOCKER_PLATFORM=""
+  
+  # If host is arm64 (M1, ect MACs), force amd64 for vdat since vdat is 86-64
+  if [ "$HOST_ARCH" = "aarch64" ] || [ "$HOST_ARCH" = "arm64" ]; then
+  DOCKER_PLATFORM="--platform linux/amd64"
+fi
+
   # Run the vdat.exe command in the container with wine
   #   --rm -> remove container after run
   #   -v ${VDAT_FULL_PATH}:/VDAT/vdat.exe -> mount vdat.exe to the container
   #   $THINGS_TO_MOUNT -> mount any input/output files or directories if needed
   #   ghcr.io/trackyverse/vdat sh -c "$VDAT_CMD" -> run the vdat command in a shell
   #      within the container
+  # add in docker platform 
   docker run --rm \
+   $DOCKER_PLATFORM \
     -v ${VDAT_FULL_PATH}:/VDAT/vdat.exe \
     $THINGS_TO_MOUNT \
     ghcr.io/trackyverse/vdat sh -c "$VDAT_CMD"
