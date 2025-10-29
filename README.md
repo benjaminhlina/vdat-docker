@@ -8,7 +8,7 @@ The helper file contained within this repository (`vdat.sh`) aims to provide acc
 3. Install Docker
   - [macOS](https://docs.docker.com/desktop/install/mac-install/)
   - [Linux](https://docs.docker.com/engine/install/)
-4. Open a terminal and pull the VDAT Docker image: `docker pull ghcr.io/trackyverse/vdat` 
+4. Open a terminal and pull the VDAT Docker image: `docker pull ghcr.io/trackyverse/vdat:latest` 
 5. In the terminal, navigate to the directory where you downloaded the Fathom Connect installer and `vdat.sh` script.
 6. Make the helper script executable: `chmod +x vdat.sh`
 7. Run the helper script with the Fathom Connect installer as an argument: `./vdat.sh Fathom_Installer.msi`. This will extract `vdat.exe` from the installer and place it in the same directory.
