@@ -91,7 +91,9 @@ fi
   #   $THINGS_TO_MOUNT -> mount any input/output files or directories if needed
   #   ghcr.io/trackyverse/vdat sh -c "$VDAT_CMD" -> run the vdat command in a shell
   #      within the container
+  # add in docker platform 
   docker run --rm \
+   $DOCKER_PLATFORM \
     -v ${VDAT_FULL_PATH}:/VDAT/vdat.exe \
     $THINGS_TO_MOUNT \
     ghcr.io/trackyverse/vdat sh -c "$VDAT_CMD"
