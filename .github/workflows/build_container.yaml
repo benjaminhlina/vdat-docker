@@ -3,7 +3,7 @@ on:
   push: 
     branches: 
       - main
-      - benjaminhlina/vdat-docker/add-docker
+      - benjaminhlina/vdat-docke/fix-arch-sh/add-rvdat
     paths:
       - 'Dockerfile'
   workflow_dispatch:
